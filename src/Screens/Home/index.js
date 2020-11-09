@@ -6,6 +6,7 @@ import { markers } from '../../utils/Markers';
 import { foodIcons } from '../../utils/Icons';
 import MarkerIcon from '../../Components/MarkerIcon';
 import Fab from '../../Components/Fab';
+import MarkerImpl from '../../Components/MarkerImpl';
 import { GOOGLE_API_KEY } from '@env';
 import MapViewDirections from 'react-native-maps-directions';
 
@@ -30,6 +31,10 @@ export default function HomeScreen({ navigation }) {
     setLatitude(region.latitude);
     setLongitude(region.longitude);
   }
+
+  useEffect(() => {
+    console.log('É A API: ', GOOGLE_API_KEY)
+  }, [])
 
   useEffect(() => {
     setPositions(mapMarkers.map(item => {
@@ -90,21 +95,13 @@ export default function HomeScreen({ navigation }) {
 
               {
                 !heatmapMode ?
-                  mapMarkers.map((marker) => {
+                  mapMarkers.map((_marker) => {
                     return (
-                      <Marker
-                        onPress={() => setLocalDirection(marker)}
-                        tracksViewChanges={false}
-                        key={marker._id}
-                        coordinate={{
-                          latitude: marker.latitude,
-                          longitude: marker.longitude
-                        }}
-                        title={`Marker_${marker.title}`}
-                      >
-                        <MarkerIcon emoji={foodIcons[3].data} />
-
-                      </Marker>
+                      <MarkerImpl
+                        key={_marker._id}
+                        mark={_marker}
+                        onPress={() => setLocalDirection(_marker)}
+                      />
                     )
                   }) : null
               }
@@ -189,8 +186,8 @@ export default function HomeScreen({ navigation }) {
               color={'#fff'}
               containerStyle={{ right: 20, bottom: 180 }}
               iconSize={35}
-              onPress={async () => { 
-                if(heatmapMode){
+              onPress={async () => {
+                if (heatmapMode) {
                   await mapRef.current.animateToRegion({
                     latitude: -20.398259, // posição padrão
                     longitude: -43.507726,
@@ -199,7 +196,7 @@ export default function HomeScreen({ navigation }) {
                     ...coords, // Sobrescreve a posição padrão se tiver carregado a posição do user
                   })
 
-                  setHeatmapMode(!heatmapMode) 
+                  setHeatmapMode(!heatmapMode)
 
                   return;
                 }
@@ -212,7 +209,7 @@ export default function HomeScreen({ navigation }) {
                   ...coords, // Sobrescreve a posição padrão se tiver carregado a posição do user
                 })
 
-                setHeatmapMode(!heatmapMode) 
+                setHeatmapMode(!heatmapMode)
               }}
             />
           </>
