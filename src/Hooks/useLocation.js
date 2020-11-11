@@ -46,7 +46,7 @@ export default () => {
           }, (error) => {
             //console.log(error);
             setErrorMsg('Não foi possível obter a localização');
-          }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 } 
+          }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, showLocationDialog: true} 
         )
       }
 
